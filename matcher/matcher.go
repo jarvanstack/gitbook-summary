@@ -3,7 +3,7 @@ package matcher
 import "regexp"
 
 // 字符串匹配器
-type IMarcher interface {
+type Marcher interface {
 	Match(str string) bool
 }
 

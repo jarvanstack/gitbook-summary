@@ -66,8 +66,8 @@ func Init(filePath string) *SugaredConfig {
 		Global.Outputfile = "SUMMARY.md"
 	}
 	// 默认 排序分隔符 -
-	if len(Global.SortedBy) == 0 {
-		Global.SortedBy = "-"
+	if len(Global.SortBy) == 0 {
+		Global.SortBy = "-"
 	}
 
 	return Global
