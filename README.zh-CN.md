@@ -85,7 +85,7 @@ $ go install -u github.com/zhengxiaoyao0716/gitbook-summary@latest
 
 ### 方式2: 下载二进制文件
 
-[Windows](bin/gitbook-summary.exe) | [Linux](gitbook-summary) | [MacOS](gitbook-summary.darwin)
+[Windows](bin/gitbook-summary.exe) | [Linux](bin/gitbook-summary) | [MacOS](bin/gitbook-summary.darwin)
 
 ## license
 
