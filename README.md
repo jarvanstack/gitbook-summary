@@ -1,13 +1,12 @@
 ## gitbook-summary
 
-
 [English](./README.md) | [简体中文](README.zh-CN.md)
 
-Golang 实现的 Gitbook 摘要生成器
+A Gitbook Summary Generator implemented by Golang
 
-## 快速开始
+## Example
 
-目录结构
+your gitbook directory structure:
 
 ```bash
 ├── docs
@@ -26,29 +25,29 @@ Golang 实现的 Gitbook 摘要生成器
 ├── gitbook-summary.yaml
 ```
 
-gitbook-summary.yaml 配置文件
+gitbook-summary.yaml
 
 ```yaml
-# 标题
+# Title of summary
 title: doc2
-# 输出文件名
+# Output file name
 outputfile: _sidebar.md
-# 扫描根目录
+# Root directory
 root: "docs"
-# 匹配文件后缀
+# File suffix, default .md
 postfix: ".md"
-# 忽略的文件或者目录, 默认是 .git and _
+# Ignore files, default ignore .git and _
 ignores:
   - _
-# 是否排序, 建议开启通过文件名排序
+# Is sort, Will sort by name
 isSort: true
-# 排序分隔符, 搭配 isFileNameToTitle 使用, 默认 "-"
+# Split by "-" and sort by name, default "-"
 sortBy: "-"
-# 将文档名转换为标题，去除分隔符和排序及后缀，例如：10a-How to use.md，“How to use”为标题，首字母大写
+# Convert the file name to a title, remove the separator and sorting and suffix, for example: 10a-How to use.md, "How to use" as the title, the first letter is capitalized
 isFileNameToTitle: true
 ```
 
-启动
+run
 
 ```bash
 $ gitbook-summary
@@ -75,15 +74,15 @@ output _sidebar.md
 
 ```
 
-## 安装
+## install
 
-### 方式1: go 安装
+### 1. Use Golang Install
 
 ```bash
 $ go install -u github.com/zhengxiaoyao0716/gitbook-summary@latest
 ```
 
-### 方式2: 下载二进制文件
+### 2. Download Binary
 
 [Windows](bin/gitbook-summary.exe) | [Linux](gitbook-summary) | [MacOS](gitbook-summary.darwin)
 
