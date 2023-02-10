@@ -1,7 +1,7 @@
 ## gitbook-summary
 
 
-[English](./README.md) | 中文
+[English](./README.md) | [简体中文](README.zh-CN.md)
 
 Golang 实现的 Gitbook 摘要生成器
 
