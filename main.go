@@ -22,6 +22,7 @@ var (
 	readme            = "README.md"
 	postfix           = ".md"
 	title             = "Title"
+	rootDir           = "docs"
 )
 
 func main() {
@@ -35,11 +36,12 @@ func main() {
 	readme = "README" + config.Global.Postfix
 	title = config.Global.Title
 	isFileNameToTitle = config.Global.IsFileNameToTitle
+	rootDir = config.Global.Root
 
 	// 忽略的文件
 	ignoreMatcher = matcher.NewRegexMatcher(config.Global.Ignores)
 
-	root, err := ScanDir(config.Global.Root)
+	root, err := ScanDir(rootDir)
 	if err != nil {
 		panic(err)
 	}
@@ -167,14 +169,14 @@ func generateSummaryNode(node *TreeNode, buffer *bytes.Buffer, level int, pathPr
 	if node.IsDir {
 		if hasReadme := hasReadme(node); hasReadme {
 			// 有 README.md 文件，直接使用 README.md 的标题
-			buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name, readme)))
+			buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(rootDir, pathPrefix, node.Name, readme)))
 		} else {
 			// 没有 README.md 文件，使用目录名作为标题
 			buffer.WriteString(fmt.Sprintf("%s%s%s\n", indent, prefix, FileNameToTitle(node.Name)))
 		}
 	} else if node.Name != readme {
 		// 不是目录，不是 README.md 文件，使用文件名作为标题
-		buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name)))
+		buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(rootDir, pathPrefix, node.Name)))
 	}
 
 	sort.Slice(node.Children, func(i, j int) bool {
