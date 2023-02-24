@@ -24,4 +24,4 @@ clean:
 help: Makefile
 	@printf "\nUsage: make <TARGETS> <OPTIONS> ...\n\nTargets:\n"
 	@sed -n 's/^##//p' $< | column -t -s ':' | sed -e 's/^/ /'
-	@echo "$$USAGE_OPTIONS
+	@echo "$$USAGE_OPTIONS"
