@@ -36,7 +36,7 @@ func main() {
 
 	// Print version
 	if b, _ := pflag.CommandLine.GetBool("version"); b {
-		fmt.Println(version)
+		fmt.Println("gitbook-summary version: ", version)
 		os.Exit(0)
 	}
 
