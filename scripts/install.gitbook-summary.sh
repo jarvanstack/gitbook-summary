@@ -1,8 +1,8 @@
 # Install gitbook-summary
-if ! command gitbook-summary -v &> /dev/null
+if ! command -v gitbook-summary &> /dev/null
 then
     # If have golang installed, use go install
-    if command go version &> /dev/null
+    if command -v go &> /dev/null
     then
         go install github.com/dengjiawen8955/gitbook-summary@latest
     else
@@ -13,5 +13,7 @@ then
         sudo chmod +x /usr/local/bin/gitbook-summary
     fi
     printf "gitbook-summary installed successfully\n"
+else 
+    printf "gitbook-summary already installed\n"    
 fi
 gitbook-summary -v

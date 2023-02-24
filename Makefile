@@ -6,6 +6,11 @@ mainFile = .
 make_dir:=$(shell pwd)
 app_name:=$(shell basename $(make_dir))
 
+## install: Install gitbook-summary
+.PHONY: install
+install:
+	./scripts/install.gitbook-summary.sh
+
 ## build: Builds the project
 .PHONY: build
 build: 
