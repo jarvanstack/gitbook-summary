@@ -2,10 +2,13 @@ package config
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
+
+var version = "v0.0.1"
 
 // SugaredConfig 将配置文件的参数解析,比如解析时间为 time.Ticker
 type SugaredConfig struct {
@@ -19,6 +22,12 @@ func Init(filePath string) *SugaredConfig {
 	pflag.StringP("config", "c", filePath, "config file")
 	pflag.BoolP("version", "v", false, "show version")
 	pflag.Parse()
+
+	// Print version
+	if b, _ := pflag.CommandLine.GetBool("version"); b {
+		fmt.Println("gitbook-summary version: ", version)
+		os.Exit(0)
+	}
 
 	viper.SetConfigType("yaml")
 	err := viper.BindPFlags(pflag.CommandLine)

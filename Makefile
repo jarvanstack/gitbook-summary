@@ -9,7 +9,12 @@ app_name:=$(shell basename $(make_dir))
 ## install: Install gitbook-summary
 .PHONY: install
 install:
-	./scripts/install.gitbook-summary.sh
+	go install github.com/dengjiawen8955/gitbook-summary@latest
+
+## uninstall: uninstall gitbook-summary
+.PHONY: uninstall
+uninstall:
+	rm -f $(GOPATH)/bin/gitbook-summary
 
 ## build: Builds the project
 .PHONY: build
