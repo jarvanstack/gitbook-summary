@@ -17,7 +17,9 @@ var Global *SugaredConfig
 func Init(filePath string) *SugaredConfig {
 	// 初始化配置文件
 	pflag.StringP("config", "c", filePath, "config file")
+	pflag.BoolP("version", "v", false, "show version")
 	pflag.Parse()
+
 	viper.SetConfigType("yaml")
 	err := viper.BindPFlags(pflag.CommandLine)
 	if err != nil {

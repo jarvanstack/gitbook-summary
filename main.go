@@ -12,6 +12,11 @@ import (
 
 	"github.com/dengjiawen8955/gitbook-summary/config"
 	"github.com/dengjiawen8955/gitbook-summary/matcher"
+	"github.com/spf13/pflag"
+)
+
+var (
+	version = "v1.0.0"
 )
 
 var (
@@ -28,6 +33,12 @@ var (
 func main() {
 	// 加载配置文件
 	config.Init("gitbook-summary.yaml")
+
+	// Print version
+	if b, _ := pflag.CommandLine.GetBool("version"); b {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 
 	// 初始化全局变量
 	isSort = config.Global.IsSort
