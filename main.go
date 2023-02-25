@@ -124,7 +124,8 @@ func GenerateSummary(root *TreeNode) string {
 	var buffer bytes.Buffer
 
 	if config.Global.Title != "" {
-		buffer.WriteString(fmt.Sprintf("# %s\n\n", config.Global.Title))
+		// Remove the title
+		// buffer.WriteString(fmt.Sprintf("# %s\n\n", config.Global.Title))
 	}
 
 	sort.Slice(root.Children, func(i, j int) bool {
