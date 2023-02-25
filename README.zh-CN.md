@@ -1,7 +1,7 @@
 ## gitbook-summary
 
 
-[English](./README.md) | [简体中文](README.zh-CN.md)
+[English](./README.md)
 
 Golang 实现的 Gitbook 摘要生成器
 
@@ -11,41 +11,38 @@ Golang 实现的 Gitbook 摘要生成器
 
 ```bash
 ├── docs
-│   ├── 1-FirstChapter
-│   │   ├── 1-FirstDocument.md
-│   │   ├── 1a-SecondDocument.md
-│   │   ├── 2-ThirdDocument.md
-│   │   └── README.md
-│   ├── 1a-SencondChapter
-│   │   ├── 1-FirstDocument.md
-│   │   ├── 1a-SecondDocument.md
-│   │   └── 2-ThirdDocument.md
-│   ├── 2-ThirdChapter
-│   │   └── 1-FirstDocument.md
-│   └── README.md
-├── gitbook-summary.yaml
+│   ├── 1-ChapterOne
+│   │   ├── 1a-SectionOne.md
+│   │   └── 1b-SectionTwo.md
+│   ├── 2-ChapterTwo
+│   │   ├── 1a-SectionOne.md
+│   │   └── 1b-SectionTwo.md
+│   ├── README.md
+│   ├── _coverpage.md
+│   ├── _media
+│   │   └── icon.svg
+│   ├── _sidebar.md
+│   ├── gitbook-summary.yaml
+│   └── index.html
 ```
 
 gitbook-summary.yaml 配置文件
 
 ```yaml
-# 标题
-title: doc2
-# 输出文件名
+# 输出的文件 
 outputfile: _sidebar.md
-# 扫描根目录
-root: "docs"
-# 匹配文件后缀
-postfix: ".md"
-# 忽略的文件或者目录, 默认是 .git and _
+# 忽略的文件 默认是 .git 和 _
 ignores:
   - _
-# 是否排序, 建议开启通过文件名排序
+# 排序分割符
+# 例如: 10a-如何使用.md, "10a" 为排序将会忽略, "如何使用" 为标题
+# 排序标题组成为 [数字][字母][排序分隔符][标题].md
 isSort: true
-# 排序分隔符, 搭配 isFileNameToTitle 使用, 默认 "-"
+# 排序分隔符
 sortBy: "-"
-# 将文档名转换为标题，去除分隔符和排序及后缀，例如：10a-How to use.md，“How to use”为标题，首字母大写
+# 将文件名转换为标题, 去掉分割符和排序和后缀, 例如: 10a-如何使用.md, "如何使用" 为标题, 首字母大写
 isFileNameToTitle: true
+
 ```
 
 启动
@@ -58,9 +55,7 @@ Summary generate success, output file:  _sidebar.md
 output _sidebar.md
 
 ```markdown
-# doc2
-
-* [Docs](docs/README.md)
+* [README](README.md)
 - [FirstChapter](1-FirstChapter/README.md)
     * [FirstDocument](1-FirstChapter/1-FirstDocument.md)
     * [SecondDocument](1-FirstChapter/1a-SecondDocument.md)

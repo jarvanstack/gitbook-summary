@@ -15,8 +15,9 @@ import (
 )
 
 var (
-	ignoreMatcher matcher.Marcher
-	readme        = "README.md"
+	IgnoreMatcher matcher.Marcher
+	Readme        = "README.md"
+	Postfix       = ".md"
 )
 
 func main() {
@@ -24,9 +25,9 @@ func main() {
 	config.Init("gitbook-summary.yaml")
 
 	// 忽略的文件
-	ignoreMatcher = matcher.NewRegexMatcher(config.Global.Ignores)
+	IgnoreMatcher = matcher.NewRegexMatcher(config.Global.Ignores)
 
-	root, err := ScanDir(config.Global.Root)
+	root, err := ScanDir(".")
 	if err != nil {
 		panic(err)
 	}
@@ -77,12 +78,12 @@ func scan(path string, parent *TreeNode, level int) error {
 
 	for _, fileInfo := range fileInfos {
 		// 忽略文件
-		if ignoreMatcher != nil && ignoreMatcher.Match(fileInfo.Name()) {
+		if IgnoreMatcher != nil && IgnoreMatcher.Match(fileInfo.Name()) {
 			continue
 		}
 
 		// 不包含后缀而且不是目录
-		if !strings.HasSuffix(fileInfo.Name(), config.Global.Postfix) && !fileInfo.IsDir() {
+		if !strings.HasSuffix(fileInfo.Name(), Postfix) && !fileInfo.IsDir() {
 			continue
 		}
 
@@ -123,18 +124,13 @@ func FileNameToTitle(fileName string) string {
 func GenerateSummary(root *TreeNode) string {
 	var buffer bytes.Buffer
 
-	if config.Global.Title != "" {
-		// Remove the title
-		// buffer.WriteString(fmt.Sprintf("# %s\n\n", config.Global.Title))
-	}
-
 	sort.Slice(root.Children, func(i, j int) bool {
 		return root.Children[i].Name < root.Children[j].Name
 	})
 
 	// 根目录下如果有 README.md 文件，直接使用 README.md 的标题放到最前面
 	if hasReadme := hasReadme(root); hasReadme {
-		buffer.WriteString(fmt.Sprintf("* [%s](%s)\n", FileNameToTitle(root.Name), filepath.Join(root.Name, readme)))
+		buffer.WriteString(fmt.Sprintf("* [%s](%s)\n", "README", Readme))
 	}
 
 	for _, child := range root.Children {
@@ -157,14 +153,14 @@ func generateSummaryNode(node *TreeNode, buffer *bytes.Buffer, level int, pathPr
 	if node.IsDir {
 		if hasReadme := hasReadme(node); hasReadme {
 			// 有 README.md 文件，直接使用 README.md 的标题
-			buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(config.Global.Root, pathPrefix, node.Name, readme)))
+			buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name, Readme)))
 		} else {
 			// 没有 README.md 文件，使用目录名作为标题
 			buffer.WriteString(fmt.Sprintf("%s%s%s\n", indent, prefix, FileNameToTitle(node.Name)))
 		}
-	} else if node.Name != readme {
+	} else if node.Name != Readme {
 		// 不是目录，不是 README.md 文件，使用文件名作为标题
-		buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(config.Global.Root, pathPrefix, node.Name)))
+		buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name)))
 	}
 
 	sort.Slice(node.Children, func(i, j int) bool {
@@ -177,7 +173,7 @@ func generateSummaryNode(node *TreeNode, buffer *bytes.Buffer, level int, pathPr
 
 func hasReadme(node *TreeNode) bool {
 	for _, child := range node.Children {
-		if child.Name == readme {
+		if child.Name == Readme {
 			return true
 		}
 	}

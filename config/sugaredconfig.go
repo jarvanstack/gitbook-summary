@@ -53,24 +53,15 @@ func Init(filePath string) *SugaredConfig {
 		Config: baseConf,
 	}
 
-	// 默认 Root .
-	if len(Global.Root) == 0 {
-		Global.Root = "."
-	}
-
-	// 默认 Postfix .md
-	if len(Global.Postfix) == 0 {
-		Global.Postfix = ".md"
-	}
-
 	// 默认 Ignores
 	Global.Ignores = append(Global.Ignores, "_")
 	Global.Ignores = append(Global.Ignores, ".git")
 
-	// 默认输出文件名 SUMMARY.md
+	// 默认输出文件名 _sidebar.md
 	if len(Global.Outputfile) == 0 {
-		Global.Outputfile = "SUMMARY.md"
+		Global.Outputfile = "_sidebar.md"
 	}
+
 	// 默认 排序分隔符 -
 	if len(Global.SortBy) == 0 {
 		Global.SortBy = "-"

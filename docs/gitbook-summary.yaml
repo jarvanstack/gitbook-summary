@@ -1,9 +1,5 @@
-# 目录标题
-title: doc2
-# 输出的文件名
+# 输出的文件 
 outputfile: _sidebar.md
-root: "docs"
-postfix: ".md"
 # 忽略的文件 默认是 .git 和 _
 ignores:
   - _

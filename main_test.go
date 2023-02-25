@@ -14,7 +14,7 @@ func Test_main(t *testing.T) {
 
 func TestScanAndSort(t *testing.T) {
 	// config.Init("gitbook-summary.yaml")
-	ignoreMatcher = matcher.NewRegexMatcher([]string{"git"})
+	IgnoreMatcher = matcher.NewRegexMatcher([]string{"git"})
 	root, err := ScanDir("data")
 	if err != nil {
 		t.Error(err)

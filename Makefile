@@ -14,7 +14,8 @@ install:
 
 ## install.dev: Install gitbook-summary in dev env
 .PHONY: install.dev
-install.dev: build
+install.dev:
+	go build -o $(bindir)/$(app_name) $(mainFile)
 	cp $(bindir)/$(app_name) $(GOPATH)/bin/gitbook-summary
 
 ## uninstall: uninstall gitbook-summary

@@ -1,6 +1,6 @@
 ## gitbook-summary
 
-[English](./README.md) | [简体中文](README.zh-CN.md)
+[简体中文](README.zh-CN.md)
 
 A Gitbook Summary Generator implemented by Golang
 
@@ -10,56 +10,52 @@ your gitbook directory structure:
 
 ```bash
 ├── docs
-│   ├── 1-FirstChapter
-│   │   ├── 1-FirstDocument.md
-│   │   ├── 1a-SecondDocument.md
-│   │   ├── 2-ThirdDocument.md
-│   │   └── README.md
-│   ├── 1a-SencondChapter
-│   │   ├── 1-FirstDocument.md
-│   │   ├── 1a-SecondDocument.md
-│   │   └── 2-ThirdDocument.md
-│   ├── 2-ThirdChapter
-│   │   └── 1-FirstDocument.md
-│   └── README.md
-├── gitbook-summary.yaml
+│   ├── 1-ChapterOne
+│   │   ├── 1a-SectionOne.md
+│   │   └── 1b-SectionTwo.md
+│   ├── 2-ChapterTwo
+│   │   ├── 1a-SectionOne.md
+│   │   └── 1b-SectionTwo.md
+│   ├── README.md
+│   ├── _coverpage.md
+│   ├── _media
+│   │   └── icon.svg
+│   ├── _sidebar.md
+│   ├── gitbook-summary.yaml
+│   └── index.html
 ```
 
 gitbook-summary.yaml
 
 ```yaml
-# Title of summary
-title: doc2
-# Output file name
+# 输出的文件 
 outputfile: _sidebar.md
-# Root directory
-root: "docs"
-# File suffix, default .md
-postfix: ".md"
-# Ignore files, default ignore .git and _
+# 忽略的文件 默认是 .git 和 _
 ignores:
   - _
-# Is sort, Will sort by name
+# 排序分割符
+# 例如: 10a-如何使用.md, "10a" 为排序将会忽略, "如何使用" 为标题
+# 排序标题组成为 [数字][字母][排序分隔符][标题].md
 isSort: true
-# Split by "-" and sort by name, default "-"
+# 排序分隔符
 sortBy: "-"
-# Convert the file name to a title, remove the separator and sorting and suffix, for example: 10a-How to use.md, "How to use" as the title, the first letter is capitalized
+# 将文件名转换为标题, 去掉分割符和排序和后缀, 例如: 10a-如何使用.md, "如何使用" 为标题, 首字母大写
 isFileNameToTitle: true
+
 ```
 
 run
 
 ```bash
-$ gitbook-summary
+$ cd docs
+$ gitbook-summary 
 Summary generate success, output file:  _sidebar.md 
 ```
 
 output _sidebar.md
 
 ```markdown
-# doc2
-
-* [Docs](docs/README.md)
+* [README](README.md)
 - [FirstChapter](1-FirstChapter/README.md)
     * [FirstDocument](1-FirstChapter/1-FirstDocument.md)
     * [SecondDocument](1-FirstChapter/1a-SecondDocument.md)
@@ -70,7 +66,6 @@ output _sidebar.md
     * [ThirdDocument](1a-SencondChapter/2-ThirdDocument.md)
 - ThirdChapter
     * [FirstDocument](2-ThirdChapter/1-FirstDocument.md)
-
 
 ```
 
