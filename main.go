@@ -138,7 +138,9 @@ func FileNameToTitle(fileName string) string {
 func GenerateSummary(root *TreeNode) string {
 	var buffer bytes.Buffer
 
-	buffer.WriteString(fmt.Sprintf("# %s\n\n", title))
+	if title != "" {
+		buffer.WriteString(fmt.Sprintf("# %s\n\n", title))
+	}
 
 	sort.Slice(root.Children, func(i, j int) bool {
 		return root.Children[i].Name < root.Children[j].Name
