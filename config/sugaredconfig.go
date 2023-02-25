@@ -67,11 +67,6 @@ func Init(filePath string) *SugaredConfig {
 	Global.Ignores = append(Global.Ignores, "_")
 	Global.Ignores = append(Global.Ignores, ".git")
 
-	// 默认目录标题 Title
-	if len(Global.Title) == 0 {
-		Global.Title = "目录"
-	}
-
 	// 默认输出文件名 SUMMARY.md
 	if len(Global.Outputfile) == 0 {
 		Global.Outputfile = "SUMMARY.md"

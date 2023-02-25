@@ -15,33 +15,18 @@ import (
 )
 
 var (
-	isSort            = true
-	isFileNameToTitle = true
-	sortBy            = "-"
-	ignoreMatcher     matcher.Marcher
-	readme            = "README.md"
-	postfix           = ".md"
-	title             = "Title"
-	rootDir           = "docs"
+	ignoreMatcher matcher.Marcher
+	readme        = "README.md"
 )
 
 func main() {
 	// 加载配置文件
 	config.Init("gitbook-summary.yaml")
 
-	// 初始化全局变量
-	isSort = config.Global.IsSort
-	sortBy = config.Global.SortBy
-	postfix = config.Global.Postfix
-	readme = "README" + config.Global.Postfix
-	title = config.Global.Title
-	isFileNameToTitle = config.Global.IsFileNameToTitle
-	rootDir = config.Global.Root
-
 	// 忽略的文件
 	ignoreMatcher = matcher.NewRegexMatcher(config.Global.Ignores)
 
-	root, err := ScanDir(rootDir)
+	root, err := ScanDir(config.Global.Root)
 	if err != nil {
 		panic(err)
 	}
@@ -97,7 +82,7 @@ func scan(path string, parent *TreeNode, level int) error {
 		}
 
 		// 不包含后缀而且不是目录
-		if !strings.HasSuffix(fileInfo.Name(), postfix) && !fileInfo.IsDir() {
+		if !strings.HasSuffix(fileInfo.Name(), config.Global.Postfix) && !fileInfo.IsDir() {
 			continue
 		}
 
@@ -122,24 +107,24 @@ func scan(path string, parent *TreeNode, level int) error {
 // FileNameToTitle 将文件名转换为标题
 // 删除 - 分隔符和前面的排序内容，将 - 分隔符后的首字母大写
 func FileNameToTitle(fileName string) string {
-	if !isFileNameToTitle {
+	if !config.Global.IsFileNameToTitle {
 		return fileName
 	}
 
 	// 删除后缀
 	fileName = strings.TrimSuffix(fileName, filepath.Ext(fileName))
 	// 删除 - 分隔符和前面的排序内容
-	fileName = strings.TrimPrefix(fileName, strings.Split(fileName, sortBy)[0]+sortBy)
+	fileName = strings.TrimPrefix(fileName, strings.Split(fileName, config.Global.SortBy)[0]+config.Global.SortBy)
 	// 将 - 分隔符后的首字母大写
-	fileName = strings.Title(strings.ReplaceAll(fileName, sortBy, " "))
+	fileName = strings.Title(strings.ReplaceAll(fileName, config.Global.SortBy, " "))
 	return fileName
 }
 
 func GenerateSummary(root *TreeNode) string {
 	var buffer bytes.Buffer
 
-	if title != "" {
-		buffer.WriteString(fmt.Sprintf("# %s\n\n", title))
+	if config.Global.Title != "" {
+		buffer.WriteString(fmt.Sprintf("# %s\n\n", config.Global.Title))
 	}
 
 	sort.Slice(root.Children, func(i, j int) bool {
@@ -171,14 +156,14 @@ func generateSummaryNode(node *TreeNode, buffer *bytes.Buffer, level int, pathPr
 	if node.IsDir {
 		if hasReadme := hasReadme(node); hasReadme {
 			// 有 README.md 文件，直接使用 README.md 的标题
-			buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(rootDir, pathPrefix, node.Name, readme)))
+			buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(config.Global.Root, pathPrefix, node.Name, readme)))
 		} else {
 			// 没有 README.md 文件，使用目录名作为标题
 			buffer.WriteString(fmt.Sprintf("%s%s%s\n", indent, prefix, FileNameToTitle(node.Name)))
 		}
 	} else if node.Name != readme {
 		// 不是目录，不是 README.md 文件，使用文件名作为标题
-		buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(rootDir, pathPrefix, node.Name)))
+		buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(config.Global.Root, pathPrefix, node.Name)))
 	}
 
 	sort.Slice(node.Children, func(i, j int) bool {
