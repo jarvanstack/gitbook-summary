@@ -85,7 +85,7 @@ $ go install github.com/dengjiawen8955/gitbook-summary@latest
 
 ### 方式2: 下载二进制文件
 
-[Windows](bin/gitbook-summary.exe) | [Linux](bin/gitbook-summary) | [MacOS](bin/gitbook-summary.darwin)
+[Windows](release/gitbook-summary.exe) | [Linux](release/gitbook-summary) | [MacOS](release/gitbook-summary.darwin)
 
 ## license
 

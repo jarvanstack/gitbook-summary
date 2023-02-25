@@ -84,7 +84,7 @@ $ go install github.com/dengjiawen8955/gitbook-summary@latest
 
 ### 2. Download Binary
 
-[Windows](bin/gitbook-summary.exe) | [Linux](bin/gitbook-summary) | [MacOS](bin/gitbook-summary.darwin)
+[Windows](release/gitbook-summary.exe) | [Linux](release/gitbook-summary) | [MacOS](release/gitbook-summary.darwin)
 
 ## license
 
