@@ -35,6 +35,9 @@ func main() {
 	// 获取 summary 内容
 	summary := GenerateSummary(root)
 
+	// 替换路径中的空格
+	summary = ReplaceSpaceInPath(summary)
+
 	// 写入文件 outputfile
 	f, err := os.Create(config.Global.Outputfile)
 	if err != nil {
@@ -44,6 +47,27 @@ func main() {
 	f.WriteString(summary)
 
 	fmt.Printf("Summary generate success, output file:  %s \n\n", config.Global.Outputfile)
+}
+
+func ReplaceSpaceInPath(s string) string {
+	var buf bytes.Buffer
+	inBrackets := false
+
+	for i := 0; i < len(s); i++ {
+		if s[i] == '(' {
+			inBrackets = true
+		} else if s[i] == ')' {
+			inBrackets = false
+		}
+
+		if inBrackets && s[i] == ' ' {
+			buf.WriteString("%20")
+		} else {
+			buf.WriteByte(s[i])
+		}
+	}
+
+	return buf.String()
 }
 
 type TreeNode struct {
@@ -117,7 +141,7 @@ func FileNameToTitle(fileName string) string {
 	// 删除 - 分隔符和前面的排序内容
 	fileName = strings.TrimPrefix(fileName, strings.Split(fileName, config.Global.SortBy)[0]+config.Global.SortBy)
 	// 将 - 分隔符后的首字母大写
-	fileName = strings.Title(strings.ReplaceAll(fileName, config.Global.SortBy, " "))
+	fileName = strings.Title(fileName)
 	return fileName
 }
 
