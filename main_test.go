@@ -2,14 +2,17 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
+	"github.com/dengjiawen8955/gitbook-summary/config"
 	"github.com/dengjiawen8955/gitbook-summary/matcher"
 )
 
-func Test_main(t *testing.T) {
-	main()
-
+func TestMain(m *testing.M) {
+	config.Init(config.WithConfigPath("docs/gitbook-summary.yaml"))
+	m.Run()
+	os.Exit(0)
 }
 
 func TestScanAndSort(t *testing.T) {
@@ -61,4 +64,8 @@ func TestFileNameToTitle(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSummary(t *testing.T) {
+	Summary("/root/workspace/work2/study1/doc2/docs", config.Global)
 }

@@ -12,6 +12,7 @@ import (
 
 	"github.com/dengjiawen8955/gitbook-summary/config"
 	"github.com/dengjiawen8955/gitbook-summary/matcher"
+	"github.com/spf13/pflag"
 )
 
 var (
@@ -20,33 +21,41 @@ var (
 	Postfix       = ".md"
 )
 
+var (
+	gcfg *config.SugaredConfig
+)
+
 func main() {
 	// 加载配置文件
-	config.Init("gitbook-summary.yaml")
+	config.Init()
+	Summary(pflag.CommandLine.Lookup("root").Value.String(), config.Global)
+}
 
+func Summary(root string, cfg *config.SugaredConfig) {
+	gcfg = cfg
 	// 忽略的文件
-	IgnoreMatcher = matcher.NewRegexMatcher(config.Global.Ignores)
+	IgnoreMatcher = matcher.NewRegexMatcher(gcfg.Ignores)
 
-	root, err := ScanDir(".")
+	rootNode, err := ScanDir(root)
 	if err != nil {
 		panic(err)
 	}
 
 	// 获取 summary 内容
-	summary := GenerateSummary(root)
+	summary := GenerateSummary(rootNode)
 
 	// 替换路径中的空格
 	summary = ReplaceSpaceInPath(summary)
 
 	// 写入文件 outputfile
-	f, err := os.Create(config.Global.Outputfile)
+	f, err := os.Create(gcfg.Outputfile)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
 	f.WriteString(summary)
 
-	fmt.Printf("Summary generate success, output file:  %s \n\n", config.Global.Outputfile)
+	fmt.Printf("Summary generate success, output file:  %s \n\n", gcfg.Outputfile)
 }
 
 func ReplaceSpaceInPath(s string) string {
@@ -132,14 +141,14 @@ func scan(path string, parent *TreeNode, level int) error {
 // FileNameToTitle 将文件名转换为标题
 // 删除 - 分隔符和前面的排序内容，将 - 分隔符后的首字母大写
 func FileNameToTitle(fileName string) string {
-	if !config.Global.IsFileNameToTitle {
+	if !gcfg.IsFileNameToTitle {
 		return fileName
 	}
 
 	// 删除后缀
 	fileName = strings.TrimSuffix(fileName, filepath.Ext(fileName))
 	// 删除 - 分隔符和前面的排序内容
-	fileName = strings.TrimPrefix(fileName, strings.Split(fileName, config.Global.SortBy)[0]+config.Global.SortBy)
+	fileName = strings.TrimPrefix(fileName, strings.Split(fileName, gcfg.SortBy)[0]+gcfg.SortBy)
 	// 将 - 分隔符后的首字母大写
 	fileName = strings.Title(fileName)
 	return fileName

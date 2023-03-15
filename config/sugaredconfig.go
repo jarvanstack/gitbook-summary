@@ -17,10 +17,34 @@ type SugaredConfig struct {
 
 var Global *SugaredConfig
 
-func Init(filePath string) *SugaredConfig {
+type option struct {
+	configPath string
+}
+
+type Option func(*option)
+
+func WithConfigPath(path string) Option {
+	return func(o *option) {
+		o.configPath = path
+	}
+}
+
+func Init(opts ...Option) *SugaredConfig {
+
+	var o option
+	for _, opt := range opts {
+		opt(&o)
+	}
+
+	configPath := o.configPath
+	if configPath == "" {
+		configPath = "gitbook-summary.yaml"
+	}
+
 	// 初始化配置文件
-	pflag.StringP("config", "c", filePath, "config file")
+	pflag.StringP("config", "c", configPath, "config file")
 	pflag.BoolP("version", "v", false, "show version")
+	pflag.StringP("root", "r", ".", "root dir")
 	pflag.Parse()
 
 	// Print version
@@ -55,7 +79,7 @@ func Init(filePath string) *SugaredConfig {
 
 	// 默认 Ignores
 	Global.Ignores = append(Global.Ignores, "_")
-	Global.Ignores = append(Global.Ignores, ".git")
+	Global.Ignores = append(Global.Ignores, "\\.git")
 
 	// 默认输出文件名 _sidebar.md
 	if len(Global.Outputfile) == 0 {
