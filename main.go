@@ -163,7 +163,7 @@ func GenerateSummary(root *TreeNode) string {
 
 	// 根目录下如果有 README.md 文件，直接使用 README.md 的标题放到最前面
 	if hasReadme := hasReadme(root); hasReadme {
-		buffer.WriteString(fmt.Sprintf("* [%s](%s)\n", "README", Readme))
+		buffer.WriteString(fmt.Sprintf("* [%s](/%s)\n", "README", Readme))
 	}
 
 	for _, child := range root.Children {
@@ -186,14 +186,14 @@ func generateSummaryNode(node *TreeNode, buffer *bytes.Buffer, level int, pathPr
 	if node.IsDir {
 		if hasReadme := hasReadme(node); hasReadme {
 			// 有 README.md 文件，直接使用 README.md 的标题
-			buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name, Readme)))
+			buffer.WriteString(fmt.Sprintf("%s%s[%s](/%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name, Readme)))
 		} else {
 			// 没有 README.md 文件，使用目录名作为标题
 			buffer.WriteString(fmt.Sprintf("%s%s%s\n", indent, prefix, FileNameToTitle(node.Name)))
 		}
 	} else if node.Name != Readme {
 		// 不是目录，不是 README.md 文件，使用文件名作为标题
-		buffer.WriteString(fmt.Sprintf("%s%s[%s](%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name)))
+		buffer.WriteString(fmt.Sprintf("%s%s[%s](/%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name)))
 	}
 
 	sort.Slice(node.Children, func(i, j int) bool {
