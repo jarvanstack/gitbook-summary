@@ -75,7 +75,7 @@ output _sidebar.md
 ### 方式1: go 安装
 
 ```bash
-$ go install github.com/dengjiawen8955/gitbook-summary@latest
+$ go install github.com/jarvanstack/gitbook-summary@latest
 ```
 
 ### 方式2: 下载二进制文件

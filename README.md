@@ -74,7 +74,7 @@ output _sidebar.md
 ### 1. Use Golang Install
 
 ```bash
-$ go install github.com/dengjiawen8955/gitbook-summary@latest
+$ go install github.com/jarvanstack/gitbook-summary@latest
 ```
 
 ### 2. Download Binary

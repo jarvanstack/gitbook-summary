@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dengjiawen8955/gitbook-summary/config"
-	"github.com/dengjiawen8955/gitbook-summary/matcher"
+	"github.com/jarvanstack/gitbook-summary/config"
+	"github.com/jarvanstack/gitbook-summary/matcher"
 	"github.com/spf13/pflag"
 )
 

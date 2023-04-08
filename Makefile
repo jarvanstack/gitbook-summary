@@ -10,7 +10,7 @@ app_name:=$(shell basename $(make_dir))
 ## install: Install gitbook-summary
 .PHONY: install
 install:
-	go install github.com/dengjiawen8955/gitbook-summary@latest
+	go install github.com/jarvanstack/gitbook-summary@latest
 
 ## install.dev: Install gitbook-summary in dev env
 .PHONY: install.dev

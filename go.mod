@@ -1,4 +1,4 @@
-module github.com/dengjiawen8955/gitbook-summary
+module github.com/jarvanstack/gitbook-summary
 
 go 1.18
 

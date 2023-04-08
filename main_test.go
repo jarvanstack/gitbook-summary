@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dengjiawen8955/gitbook-summary/config"
-	"github.com/dengjiawen8955/gitbook-summary/matcher"
+	"github.com/jarvanstack/gitbook-summary/config"
+	"github.com/jarvanstack/gitbook-summary/matcher"
 )
 
 func TestMain(m *testing.M) {
