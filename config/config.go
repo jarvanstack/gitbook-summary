@@ -6,6 +6,7 @@ type Config struct {
 	Outputfile        string   `yaml:"outputfile"`
 	Ignores           []string `yaml:"ignores"`
 	IsSort            bool     `yaml:"isSort"`
+	IsisSortDesc      bool     `yaml:"isisSortDesc"`
 	SortBy            string   `yaml:"sortBy"`
 	IsFileNameToTitle bool     `yaml:"isFileNameToTitle"`
 }

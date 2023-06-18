@@ -7,7 +7,9 @@ ignores:
 # 例如: 10a-如何使用.md, "10a" 为排序将会忽略, "如何使用" 为标题
 # 排序标题组成为 [数字][字母][排序分隔符][标题].md
 isSort: true
+# 是否倒序
+isisSortDesc: true
 # 排序分隔符
 sortBy: "-"
 # 将文件名转换为标题, 去掉分割符和排序和后缀, 例如: 10a-如何使用.md, "如何使用" 为标题, 首字母大写
-isFileNameToTitle: true
+isFileNameToTitle: false

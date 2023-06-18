@@ -197,6 +197,9 @@ func generateSummaryNode(node *TreeNode, buffer *bytes.Buffer, level int, pathPr
 	}
 
 	sort.Slice(node.Children, func(i, j int) bool {
+		if gcfg.Config.IsisSortDesc {
+			return node.Children[i].Name > node.Children[j].Name
+		}
 		return node.Children[i].Name < node.Children[j].Name
 	})
 	for _, child := range node.Children {
