@@ -67,5 +67,5 @@ func TestFileNameToTitle(t *testing.T) {
 }
 
 func TestSummary(t *testing.T) {
-	Summary("/root/workspace/work2/study1/doc2/docs", config.Global)
+	Summary("./docs", config.Global)
 }
