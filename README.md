@@ -79,7 +79,7 @@ $ go install github.com/jarvanstack/gitbook-summary@latest
 
 ### 2. Download Binary
 
-[Windows](release/gitbook-summary.exe) | [Linux](release/gitbook-summary) | [MacOS](release/gitbook-summary.darwin)
+release:  https://github.com/jarvanstack/gitbook-summary/releases/
 
 ## license
 

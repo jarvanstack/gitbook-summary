@@ -80,7 +80,7 @@ $ go install github.com/jarvanstack/gitbook-summary@latest
 
 ### 方式2: 下载二进制文件
 
-[Windows](release/gitbook-summary.exe) | [Linux](release/gitbook-summary) | [MacOS](release/gitbook-summary.darwin)
+release:  https://github.com/jarvanstack/gitbook-summary/releases/
 
 ## license
 
