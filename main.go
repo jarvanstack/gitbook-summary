@@ -8,11 +8,9 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
-	"testing"
 
 	"github.com/jarvanstack/gitbook-summary/config"
 	"github.com/jarvanstack/gitbook-summary/matcher"
-	"github.com/spf13/pflag"
 )
 
 var (
@@ -28,7 +26,7 @@ var (
 func main() {
 	// 加载配置文件
 	config.Init()
-	Summary(pflag.CommandLine.Lookup("root").Value.String(), config.Global)
+	Summary(config.Global.RootDir, config.Global)
 }
 
 func Summary(root string, cfg *config.SugaredConfig) {
@@ -80,6 +78,7 @@ func ReplaceSpaceInPath(s string) string {
 }
 
 type TreeNode struct {
+	FileInfo os.FileInfo // 文件信息
 	Name     string      // 名称
 	IsDir    bool        // 是否是目录
 	Level    int         // 目录层级
@@ -121,8 +120,9 @@ func scan(path string, parent *TreeNode, level int) error {
 		}
 
 		child := &TreeNode{
-			Name:  fileInfo.Name(),
-			Level: level + 1,
+			Name:     fileInfo.Name(),
+			Level:    level + 1,
+			FileInfo: fileInfo,
 		}
 		parent.Children = append(parent.Children, child)
 
@@ -157,9 +157,7 @@ func FileNameToTitle(fileName string) string {
 func GenerateSummary(root *TreeNode) string {
 	var buffer bytes.Buffer
 
-	sort.Slice(root.Children, func(i, j int) bool {
-		return root.Children[i].Name < root.Children[j].Name
-	})
+	Sort(root)
 
 	// 根目录下如果有 README.md 文件，直接使用 README.md 的标题放到最前面
 	if hasReadme := hasReadme(root); hasReadme {
@@ -196,15 +194,33 @@ func generateSummaryNode(node *TreeNode, buffer *bytes.Buffer, level int, pathPr
 		buffer.WriteString(fmt.Sprintf("%s%s[%s](/%s)\n", indent, prefix, FileNameToTitle(node.Name), filepath.Join(pathPrefix, node.Name)))
 	}
 
-	sort.Slice(node.Children, func(i, j int) bool {
-		if gcfg.Config.IsisSortDesc {
-			return node.Children[i].Name > node.Children[j].Name
-		}
-		return node.Children[i].Name < node.Children[j].Name
-	})
+	Sort(node)
 	for _, child := range node.Children {
 		generateSummaryNode(child, buffer, level+1, filepath.Join(pathPrefix, node.Name))
 	}
+}
+
+func Sort(node *TreeNode) {
+	sort.Slice(node.Children, func(i, j int) (less bool) {
+		if gcfg.Config.IsisSortDesc {
+			if gcfg.Config.SortOrder == "modified" {
+				less = node.Children[i].FileInfo.ModTime().After(node.Children[j].FileInfo.ModTime())
+				// fmt.Printf("%s ModTime: %v, %s ModTime: %v, less: %v\n", node.Children[i].Name, node.Children[i].FileInfo.ModTime(), node.Children[j].Name, node.Children[j].FileInfo.ModTime(), less)
+			} else {
+				less = node.Children[i].Name > node.Children[j].Name
+
+			}
+		} else {
+			if gcfg.Config.SortOrder == "modified" {
+				less = node.Children[i].FileInfo.ModTime().Before(node.Children[j].FileInfo.ModTime())
+				// fmt.Printf("%s ModTime: %v, %s ModTime: %v, less: %v\n", node.Children[i].Name, node.Children[i].FileInfo.ModTime(), node.Children[j].Name, node.Children[j].FileInfo.ModTime(), less)
+			} else {
+				less = node.Children[i].Name < node.Children[j].Name
+			}
+		}
+
+		return
+	})
 }
 
 func hasReadme(node *TreeNode) bool {
@@ -214,15 +230,6 @@ func hasReadme(node *TreeNode) bool {
 		}
 	}
 	return false
-}
-
-func Test_Scan(t *testing.T) {
-	root, err := ScanDir(".")
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	printTree(root, "")
 }
 
 func printTree(node *TreeNode, prefix string) {

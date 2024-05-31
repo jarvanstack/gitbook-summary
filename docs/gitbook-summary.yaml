@@ -3,6 +3,9 @@ outputfile: _sidebar.md
 # 忽略的文件 默认是 .git 和 _
 ignores:
   - _
+# 排序规则 1.defualt 或 "" 2. modified 文件更新时间排序
+sortOrder: modified
+# 1. default
 # 排序分割符
 # 例如: 10a-如何使用.md, "10a" 为排序将会忽略, "如何使用" 为标题
 # 排序标题组成为 [数字][字母][排序分隔符][标题].md

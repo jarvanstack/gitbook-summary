@@ -2,17 +2,30 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/jarvanstack/gitbook-summary/config"
 	"github.com/jarvanstack/gitbook-summary/matcher"
 )
 
-func TestMain(m *testing.M) {
-	config.Init(config.WithConfigPath("docs/gitbook-summary.yaml"))
-	m.Run()
-	os.Exit(0)
+// func TestMain1(m *testing.M) {
+// 	config.Init(config.WithConfigPath("docs/gitbook-summary.yaml"))
+// 	m.Run()
+// 	os.Exit(0)
+// }
+
+func TestMainFunc(t *testing.T) {
+	config.Init(config.WithConfigPath("/Users/hcm-b0487/workspace/work2/study1/doc2/docs/gitbook-summary.yaml"), config.WithRootDir("/Users/hcm-b0487/workspace/work2/study1/doc2/docs"))
+	Summary(config.Global.RootDir, config.Global)
+}
+
+func Test_Scan(t *testing.T) {
+	root, err := ScanDir(".")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	printTree(root, "")
 }
 
 func TestScanAndSort(t *testing.T) {

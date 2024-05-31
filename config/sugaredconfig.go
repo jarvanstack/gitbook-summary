@@ -13,30 +13,38 @@ var version = "v0.0.1"
 // SugaredConfig 将配置文件的参数解析,比如解析时间为 time.Ticker
 type SugaredConfig struct {
 	*Config
+	*OptionCfg
 }
 
 var Global *SugaredConfig
 
-type option struct {
-	configPath string
+type OptionCfg struct {
+	ConfigPath string
+	RootDir    string
 }
 
-type Option func(*option)
+type Option func(*OptionCfg)
 
 func WithConfigPath(path string) Option {
-	return func(o *option) {
-		o.configPath = path
+	return func(o *OptionCfg) {
+		o.ConfigPath = path
+	}
+}
+
+func WithRootDir(dir string) Option {
+	return func(o *OptionCfg) {
+		o.RootDir = dir
 	}
 }
 
 func Init(opts ...Option) *SugaredConfig {
 
-	var o option
+	var o OptionCfg
 	for _, opt := range opts {
 		opt(&o)
 	}
 
-	configPath := o.configPath
+	configPath := o.ConfigPath
 	if configPath == "" {
 		configPath = "gitbook-summary.yaml"
 	}
@@ -46,6 +54,11 @@ func Init(opts ...Option) *SugaredConfig {
 	pflag.BoolP("version", "v", false, "show version")
 	pflag.StringP("root", "r", ".", "root dir")
 	pflag.Parse()
+
+	// 初始化 root config
+	if o.RootDir == "" {
+		o.RootDir = pflag.CommandLine.Lookup("root").Value.String()
+	}
 
 	// Print version
 	if b, _ := pflag.CommandLine.GetBool("version"); b {
@@ -67,14 +80,13 @@ func Init(opts ...Option) *SugaredConfig {
 	// 解析初始配置
 	baseConf := &Config{}
 	if err := viper.Unmarshal(baseConf); err != nil {
-		if err != nil {
-			panic(err)
-		}
+		panic(err)
 	}
 
 	// 构造 SugaredConfig
 	Global = &SugaredConfig{
-		Config: baseConf,
+		Config:    baseConf,
+		OptionCfg: &o,
 	}
 
 	// 默认 Ignores
